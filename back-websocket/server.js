@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -6,20 +7,46 @@ const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 
-// Configuration CORS ouverte pour le réseau
+// Configuration CORS pour production et développement
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? [
+        process.env.FRONTEND_URL,
+        /\.render\.com$/,
+        /\.onrender\.com$/
+      ]
+    : ["*"];
+
 app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true
 }));
 
 const io = socketIo(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: allowedOrigins,
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
 const gameRooms = new Map();
+
+// Route de test pour vérifier que le serveur fonctionne
+app.get('/', (req, res) => {
+    res.json({
+        message: '🎮 Serveur de puzzle collaboratif actif !',
+        status: 'running',
+        port: PORT,
+        rooms: gameRooms.size,
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
+
+app.get('/health', (req, res) => {
+    res.json({ status: 'healthy', rooms: gameRooms.size });
+});
 
 function generateRoomId() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -101,12 +128,16 @@ io.on('connection', (socket) => {
     });
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Serveur backend démarré sur le port ${PORT}`);
-    console.log(`🌐 Accessible localement : http://localhost:${PORT}`);
-    console.log(`🌐 Accessible réseau : http://10.2.165.123:${PORT}`);
-    console.log(`📱 Frontend accessible sur : http://10.2.165.123:3000`);
+    console.log(`🌐 Serveur accessible sur : ${process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`}`);
+    
+    if (process.env.NODE_ENV === 'production') {
+        console.log(`🚀 Mode production - Render deployment`);
+    } else {
+        console.log(`� Mode développement local`);
+        console.log(`🌐 Accessible réseau : http://10.2.164.27:${PORT}`);
+    }
 });
-
