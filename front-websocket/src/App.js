@@ -44,6 +44,12 @@ function App() {
             setError(message);
         });
 
+        socket.on('puzzle-completed', ({ completedBy, completionTime }) => {
+            console.log('🎉 Puzzle terminé !', { completedBy });
+            setGameState('completed');
+            // Vous pouvez ajouter d'autres actions ici (sons, animations, etc.)
+        });
+
         socket.on('game-completed', ({ winner, stats }) => {
             setGameState('completed');
         });

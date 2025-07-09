@@ -179,3 +179,156 @@ button:hover {
     padding: 40px;
     color: rgba(255, 255, 255, 0.8);
 }
+
+/* Styles pour les règles du jeu */
+.game-rules {
+    margin: 10px 0;
+}
+
+.rules-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.rules-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.rules-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.rules-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: #333;
+}
+
+.rules-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 2px solid #f0f0f0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px 15px 0 0;
+}
+
+.rules-header h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.close-rules {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.close-rules:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.rules-body {
+    padding: 25px;
+}
+
+.rule-section {
+    margin-bottom: 20px;
+}
+
+.rule-section h4 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-left: 4px solid #667eea;
+    padding-left: 10px;
+}
+
+.rule-section p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.rule-section ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.rule-section li {
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+/* Styles améliorés pour le drag & drop */
+.puzzle-piece.dragging {
+    cursor: grabbing !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    z-index: 1000 !important;
+}
+
+.puzzle-piece.held-by-other {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    filter: grayscale(30%);
+}
+
+.puzzle-piece:hover:not(.held-by-other):not(.placed) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.correct-zone {
+    pointer-events: none;
+    user-select: none;
+}
+
+.puzzle-board {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animation pour les pièces bien placées */
+.puzzle-piece.placed {
+    animation: pieceSnap 0.3s ease-out;
+}
+
+@keyframes pieceSnap {
+    0% { transform: scale(1.1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}

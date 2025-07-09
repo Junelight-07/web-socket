@@ -18,10 +18,13 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
     : [
         "http://localhost:3000",
         "http://localhost:3002", 
+        "http://localhost:3003",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:3002",
+        "http://127.0.0.1:3003",
         "http://10.2.164.27:3000",
-        "http://10.2.164.27:3002"
+        "http://10.2.164.27:3002",
+        "http://10.2.164.27:3003"
       ];
 
 console.log('🔧 CORS Origins autorisées:', allowedOrigins);
@@ -148,6 +151,88 @@ io.on('connection', (socket) => {
             roomId,
             players: room.players,
             pieces: room.pieces
+        });
+    });
+
+    socket.on('grab-piece', ({ roomId, pieceId, playerId, playerName }) => {
+        const room = gameRooms.get(roomId);
+        if (!room) return;
+
+        const piece = room.pieces.find(p => p.id === pieceId);
+        if (!piece || piece.isPlaced) return;
+
+        // Marquer la pièce comme saisie
+        piece.isGrabbed = true;
+        piece.grabbedBy = playerId;
+
+        console.log(`🤏 ${playerName} a saisi la pièce ${piece.gridPosition.row}-${piece.gridPosition.col}`);
+
+        // Informer tous les joueurs de la salle
+        io.to(roomId).emit('piece-grabbed', { 
+            pieceId, 
+            playerId, 
+            playerName 
+        });
+    });
+
+    socket.on('move-piece', ({ roomId, pieceId, position }) => {
+        const room = gameRooms.get(roomId);
+        if (!room) return;
+
+        const piece = room.pieces.find(p => p.id === pieceId);
+        if (!piece || piece.grabbedBy !== socket.id) return;
+
+        // Mettre à jour la position
+        piece.position = position;
+
+        // Vérifier si la pièce est à la bonne position
+        const { checkPiecePosition } = require('./utils/puzzleGenerator');
+        const isCorrect = checkPiecePosition(piece, 30); // tolerance de 30px
+
+        if (isCorrect && !piece.isPlaced) {
+            piece.isPlaced = true;
+            piece.isGrabbed = false;
+            piece.grabbedBy = null;
+            piece.position = { ...piece.correctPosition }; // Snap à la position exacte
+            
+            console.log(`✅ Pièce ${piece.gridPosition.row}-${piece.gridPosition.col} bien placée !`);
+            
+            // Vérifier si le puzzle est terminé
+            const allPlaced = room.pieces.every(p => p.isPlaced);
+            if (allPlaced) {
+                console.log(`🎉 Puzzle terminé dans la salle ${roomId} !`);
+                io.to(roomId).emit('puzzle-completed', {
+                    completedBy: room.players.map(p => p.username),
+                    completionTime: Date.now()
+                });
+            }
+        }
+
+        // Envoyer la mise à jour à tous les joueurs
+        io.to(roomId).emit('pieces-updated', { 
+            pieces: room.pieces 
+        });
+    });
+
+    socket.on('release-piece', ({ roomId, pieceId }) => {
+        const room = gameRooms.get(roomId);
+        if (!room) return;
+
+        const piece = room.pieces.find(p => p.id === pieceId);
+        if (!piece || piece.grabbedBy !== socket.id) return;
+
+        // Relâcher la pièce seulement si elle n'est pas bien placée
+        if (!piece.isPlaced) {
+            piece.isGrabbed = false;
+            piece.grabbedBy = null;
+            
+            console.log(`🤲 Pièce ${piece.gridPosition.row}-${piece.gridPosition.col} relâchée`);
+        }
+
+        // Informer tous les joueurs
+        io.to(roomId).emit('piece-released', { pieceId });
+        io.to(roomId).emit('pieces-updated', { 
+            pieces: room.pieces 
         });
     });
 
