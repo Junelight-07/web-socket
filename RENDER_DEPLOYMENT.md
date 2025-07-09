@@ -152,6 +152,23 @@ Essayer :
 **Cause :** Le backend ne reconnaît pas l'URL du frontend
 
 **Solution IMMÉDIATE :**
+
+**Pour le développement local :**
+Si votre frontend fonctionne sur un port différent (ex: 3003 au lieu de 3000), ajoutez le port dans `back-websocket/server.js` :
+```javascript
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? [/* production origins */]
+    : [
+        "http://localhost:3000",
+        "http://localhost:3002", 
+        "http://localhost:3003", // ← Ajouter le bon port
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3002",
+        "http://127.0.0.1:3003"  // ← Ajouter le bon port
+      ];
+```
+
+**Pour la production Render :**
 1. **Aller sur le service Backend sur Render**
 2. **Environment Variables → Ajouter/Modifier :**
    - `FRONTEND_URL` = `https://votre-frontend-exact.onrender.com`
