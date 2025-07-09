@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
+const { generatePuzzlePieces } = require('./utils/puzzleGenerator');
 
 const app = express();
 const server = http.createServer(app);
@@ -66,6 +67,17 @@ io.on('connection', (socket) => {
 
     socket.on('create-room', ({ username }) => {
         const roomId = generateRoomId();
+        
+        // Configuration du puzzle
+        const puzzleConfig = {
+            gridSize: { rows: 3, cols: 3 }, // Puzzle 3x3 pour commencer
+            pieceSize: { width: 100, height: 100 },
+            boardSize: { width: 800, height: 600 }
+        };
+        
+        // Génération des pièces de puzzle
+        const puzzlePieces = generatePuzzlePieces(puzzleConfig);
+        
         const room = {
             id: roomId,
             players: [{
@@ -75,13 +87,15 @@ io.on('connection', (socket) => {
             }],
             host: socket.id,
             gameStarted: false,
-            pieces: []
+            pieces: puzzlePieces,
+            config: puzzleConfig
         };
 
         gameRooms.set(roomId, room);
         socket.join(roomId);
 
         console.log(`🎮 Salle créée: ${roomId} par ${username} (${room.players.length}/4 joueurs)`);
+        console.log(`🧩 Puzzle généré: ${puzzlePieces.length} pièces`);
         console.log(`📊 Total des salles actives: ${gameRooms.size}`);
 
         socket.emit('room-created', {
