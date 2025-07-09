@@ -9,6 +9,8 @@ function App() {
     const [roomId, setRoomId] = useState(null);
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
+    const [players, setPlayers] = useState([]);
+    const [pieces, setPieces] = useState([]);
 
     const socket = useSocket();
 
@@ -16,14 +18,26 @@ function App() {
         if (!socket) return;
 
         socket.on('room-created', ({ roomId, pieces, players }) => {
+            console.log('🎮 Room created:', { roomId, players });
             setRoomId(roomId);
+            setPlayers(players || []);
+            setPieces(pieces || []);
             setGameState('playing');
             setError('');
         });
 
-        socket.on('player-joined', ({ players, pieces }) => {
+        socket.on('player-joined', ({ roomId, players, pieces }) => {
+            console.log('👥 Player joined:', { roomId, players });
+            if (roomId) setRoomId(roomId); // Mettre à jour le roomId
+            setPlayers(players || []);
+            setPieces(pieces || []);
             setGameState('playing');
             setError('');
+        });
+
+        socket.on('player-left', ({ players }) => {
+            console.log('👋 Player left:', { players });
+            setPlayers(players || []);
         });
 
         socket.on('room-error', ({ message }) => {
@@ -37,6 +51,7 @@ function App() {
         return () => {
             socket.off('room-created');
             socket.off('player-joined');
+            socket.off('player-left');
             socket.off('room-error');
             socket.off('game-completed');
         };
@@ -102,6 +117,8 @@ function App() {
                         socket={socket}
                         roomId={roomId}
                         username={username}
+                        players={players}
+                        pieces={pieces}
                     />
                 )}
 

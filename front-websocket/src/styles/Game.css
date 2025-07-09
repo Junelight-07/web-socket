@@ -56,3 +56,64 @@ button {
 button:hover {
     background: #2980b9;
 }
+
+/* Styles pour la liste des joueurs */
+.players-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    backdrop-filter: blur(10px);
+}
+
+.players-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.player-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.player-item.current-player {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.player-name {
+    font-weight: bold;
+}
+
+.you-indicator {
+    font-size: 0.8em;
+    color: #FFD700;
+    font-weight: normal;
+}
+
+.player-status {
+    font-size: 0.8em;
+}
+
+.no-players {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    margin: 10px 0;
+}
+
+.puzzle-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    backdrop-filter: blur(10px);
+}

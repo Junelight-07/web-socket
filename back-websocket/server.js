@@ -14,7 +14,16 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
         /\.render\.com$/,
         /\.onrender\.com$/
       ]
-    : ["*"];
+    : [
+        "http://localhost:3000",
+        "http://localhost:3002", 
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3002",
+        "http://10.2.164.27:3000",
+        "http://10.2.164.27:3002"
+      ];
+
+console.log('🔧 CORS Origins autorisées:', allowedOrigins);
 
 app.use(cors({
     origin: allowedOrigins,
@@ -72,7 +81,8 @@ io.on('connection', (socket) => {
         gameRooms.set(roomId, room);
         socket.join(roomId);
 
-        console.log(`🎮 Salle créée: ${roomId} par ${username}`);
+        console.log(`🎮 Salle créée: ${roomId} par ${username} (${room.players.length}/4 joueurs)`);
+        console.log(`📊 Total des salles actives: ${gameRooms.size}`);
 
         socket.emit('room-created', {
             roomId,
@@ -85,12 +95,26 @@ io.on('connection', (socket) => {
         const room = gameRooms.get(roomId);
 
         if (!room) {
+            console.log(`❌ Salle introuvable: ${roomId}`);
             socket.emit('room-error', { message: 'Salle introuvable' });
             return;
         }
 
         if (room.players.length >= 4) {
+            console.log(`❌ Salle pleine: ${roomId}`);
             socket.emit('room-error', { message: 'Salle pleine' });
+            return;
+        }
+
+        // Vérifier si le joueur n'est pas déjà dans la salle
+        const existingPlayer = room.players.find(p => p.id === socket.id);
+        if (existingPlayer) {
+            console.log(`⚠️ Joueur déjà dans la salle: ${username}`);
+            socket.emit('player-joined', {
+                roomId,
+                players: room.players,
+                pieces: room.pieces
+            });
             return;
         }
 
@@ -102,9 +126,12 @@ io.on('connection', (socket) => {
 
         socket.join(roomId);
 
-        console.log(`👥 ${username} a rejoint la salle ${roomId}`);
+        console.log(`👥 ${username} a rejoint la salle ${roomId} (${room.players.length}/4 joueurs)`);
+        console.log(`🎯 Joueurs dans ${roomId}:`, room.players.map(p => p.username));
 
+        // Envoyer l'événement à TOUS les joueurs de la salle (y compris celui qui vient de rejoindre)
         io.to(roomId).emit('player-joined', {
+            roomId,
             players: room.players,
             pieces: room.pieces
         });
