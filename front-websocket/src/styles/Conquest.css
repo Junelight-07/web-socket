@@ -1,0 +1,613 @@
+/* Styles pour le jeu de conquête */
+.conquest-board {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.conquest-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.conquest-stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.attack-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 200px;
+}
+
+.conquest-grid-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    overflow: auto;
+    max-width: 100%;
+    padding: 10px;
+}
+
+.conquest-grid {
+    display: grid;
+    gap: 1px;
+    background: #333;
+    border: 2px solid #555;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.conquest-cell {
+    position: relative;
+    min-width: 20px;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    user-select: none;
+}
+
+.conquest-cell:hover {
+    transform: scale(1.1);
+    z-index: 10;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+.terrain-icon {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 8px;
+    opacity: 0.7;
+    z-index: 3;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.troop-count {
+    position: absolute;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.troop-own {
+    background: rgba(50, 205, 50, 0.8);
+    color: white;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.troop-enemy {
+    background: rgba(220, 20, 60, 0.8);
+    color: white;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.troop-neutral {
+    background: rgba(100, 100, 100, 0.8);
+    color: white;
+}
+
+.conquest-message {
+    padding: 10px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.conquest-instructions {
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.conquest-instructions p {
+    margin: 5px 0;
+}
+
+/* Styles pour les terrains */
+.plain {
+    background-color: #228B22; /* vert */
+}
+
+.mountain {
+    background-color: #8B4513; /* marron */
+}
+
+.water {
+    background-color: #1e90ff; /* bleu */
+}
+
+/* Couleurs pour les bots ennemis */
+.enemy1 { background-color: #8B4513; } /* Marron */
+.enemy2 { background-color: #4B0082; } /* Indigo */
+.enemy3 { background-color: #FF4500; } /* Orange */
+.enemy4 { background-color: #228B22; } /* Vert */
+.enemy5 { background-color: #FFD700; } /* Doré */
+.enemy6 { background-color: #FF1493; } /* Rose */
+.enemy7 { background-color: #00CED1; } /* Turquoise */
+.enemy8 { background-color: #9932CC; } /* Violet */
+.enemy9 { background-color: #DC143C; } /* Crimson */
+
+/* Style pour les joueurs */
+.player-color-0 { background-color: #FF0000; } /* Rouge */
+.player-color-1 { background-color: #00FF00; } /* Vert */
+.player-color-2 { background-color: #0000FF; } /* Bleu */
+.player-color-3 { background-color: #FFFF00; } /* Jaune */
+.player-color-4 { background-color: #FF00FF; } /* Magenta */
+.player-color-5 { background-color: #00FFFF; } /* Cyan */
+.player-color-6 { background-color: #FFA500; } /* Orange */
+.player-color-7 { background-color: #800080; } /* Violet */
+
+/* Styles pour les contrôles d'attaque */
+.attack-percent-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+
+.attack-percent-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.attack-percent-control input[type="range"] {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+}
+
+.attack-percent-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f1c40f;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Message de notification */
+.conquest-message {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    transition: opacity 0.3s;
+    max-width: 90%;
+    text-align: center;
+}
+
+/* Panneau de joueurs */
+.conquest-players {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.player-badge {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.player-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.player-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.player-online {
+    background-color: #4CAF50;
+}
+
+.player-offline {
+    background-color: #F44336;
+}
+
+/* Panel d'informations d'attaque */
+.attack-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.attack-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.attack-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.attack-stat-icon {
+    font-size: 16px;
+}
+
+.attack-stat-label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.attack-stat-value {
+    font-weight: bold;
+    font-size: 16px;
+    color: #4fc3f7;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .conquest-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .conquest-grid-container {
+        overflow: auto;
+        max-height: 70vh;
+    }
+    
+    .conquest-cell {
+        min-width: 18px;
+        min-height: 18px;
+    }
+    
+    .troop-count {
+        font-size: 8px;
+        width: 14px;
+        height: 14px;
+    }
+}
+
+/* Animations pour les attaques et les conquêtes */
+@keyframes conquest-attack {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.8; box-shadow: 0 0 30px rgba(255, 0, 0, 0.8); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes conquest-defense {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.9); opacity: 0.9; box-shadow: 0 0 20px rgba(0, 0, 255, 0.8); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes conquest-conquer {
+    0% { transform: scale(1); filter: brightness(1); }
+    25% { transform: scale(1.15); filter: brightness(1.5); }
+    50% { transform: scale(1.2); filter: brightness(1.8); box-shadow: 0 0 15px rgba(255, 255, 0, 0.8); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+.cell-attacking {
+    animation: conquest-attack 0.8s ease;
+    z-index: 25 !important;
+}
+
+.cell-defending {
+    animation: conquest-defense 0.8s ease;
+    z-index: 25 !important;
+}
+
+.cell-conquering {
+    animation: conquest-conquer 0.6s ease;
+    z-index: 25 !important;
+}
+
+/* Amélioration du style pour les cellules attaquables */
+.attackable-cell {
+    position: relative;
+    overflow: hidden;
+}
+
+.attackable-cell:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 0, 0.2);
+    z-index: 5;
+    pointer-events: none;
+    animation: pulse-border 1.5s infinite alternate;
+}
+
+.attackable-cell:after {
+    content: '⚔️';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    opacity: 0.8;
+    z-index: 6;
+    pointer-events: none;
+    text-shadow: 0 0 3px #000;
+}
+
+@keyframes pulse-border {
+    0% {
+        box-shadow: inset 0 0 0 2px rgba(255, 215, 0, 0.5);
+    }
+    100% {
+        box-shadow: inset 0 0 0 2px rgba(255, 215, 0, 1);
+    }
+}
+
+/* Affichage des troupes en attaque */
+.attack-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.attack-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.attack-label {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.attack-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff5722;
+}
+
+/* Hover amélioré pour les cellules */
+.conquest-cell:hover {
+    transform: scale(1.15);
+    z-index: 30;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Styles pour la victoire */
+.victory-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    color: white;
+}
+
+.victory-message {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.return-button {
+    padding: 10px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.return-button:hover {
+    background: #45a049;
+}
+
+/* Styles pour les cellules attaquables */
+.attackable-cell {
+    animation: pulse 1.5s infinite alternate;
+    position: relative;
+}
+
+@keyframes pulse {
+    0% {
+        filter: brightness(1);
+    }
+    100% {
+        filter: brightness(1.3);
+    }
+}
+
+.attackable-cell:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 0, 0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 3h6v6M9 21H3v-6'/%3E%3Cpath d='M21 3l-7 7M3 21l7-7'/%3E%3C/svg%3E") center no-repeat;
+    background-size: 60%;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Styles améliorés pour les boutons d'action */
+.neutral-attack-button, .enemy-attack-button, .end-turn-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    min-height: 55px;
+}
+
+.neutral-attack-button, .enemy-attack-button {
+    min-width: 200px;
+}
+
+.end-turn-button {
+    width: 100%;
+    max-width: 420px;
+    justify-content: center;
+}
+
+.button-icon {
+    font-size: 1.3em;
+}
+
+.button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.button-title {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.button-desc {
+    font-size: 0.75em;
+    opacity: 0.8;
+}
+
+.neutral-attack-button {
+    background: linear-gradient(45deg, #4CAF50, #2E7D32);
+}
+
+.neutral-attack-button:hover:not([disabled]) {
+    background: linear-gradient(45deg, #43A047, #1B5E20);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.enemy-attack-button {
+    background: linear-gradient(45deg, #F44336, #C62828);
+}
+
+.enemy-attack-button:hover:not([disabled]) {
+    background: linear-gradient(45deg, #E53935, #B71C1C);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.end-turn-button {
+    background: linear-gradient(45deg, #3F51B5, #303F9F);
+}
+
+.end-turn-button:hover:not([disabled]) {
+    background: linear-gradient(45deg, #3949AB, #283593);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Style pour les boutons désactivés */
+.neutral-attack-button:disabled,
+.enemy-attack-button:disabled,
+.end-turn-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Animation pour l'item de statistique "En attaque" */
+.stat-item.attacking {
+    animation: highlight-attack 1.5s infinite alternate;
+}
+
+@keyframes highlight-attack {
+    0% { background: rgba(244, 67, 54, 0.2); }
+    100% { background: rgba(244, 67, 54, 0.4); }
+}
+
+.attack-value {
+    color: #f44336;
+}
