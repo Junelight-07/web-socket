@@ -66,6 +66,24 @@ button:hover {
     margin: 0 auto;
 }
 
+.lobby-error-message {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+    to { box-shadow: 0 4px 12px rgba(231, 76, 60, 0.5); }
+}
+
 .game-modes {
     margin-bottom: 30px;
 }
@@ -520,4 +538,66 @@ button:hover {
     opacity: 0.8;
     margin-top: 8px;
     text-align: center;
+}
+
+.leave-game-btn {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 100;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.leave-game-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Styles pour la validation des champs */
+.required-field {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+.input-with-validation {
+    position: relative;
+    width: 100%;
+}
+
+.empty-field {
+    border: 2px solid #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.input-error-hint {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 2px;
+    font-style: italic;
+    position: absolute;
+    left: 10px;
+    top: 100%;
+}
+
+.centered-hint {
+    position: relative;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.join-inputs-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.disabled-button {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

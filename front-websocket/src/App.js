@@ -178,6 +178,8 @@ function App() {
 
     const handleCreateRoom = (username, options = {}) => {
         if (socket && username.trim()) {
+            // Réinitialiser les erreurs précédentes
+            setError('');
             setUsername(username.trim());
             
             // Options peut contenir gameMode, mapSize, difficulty, isPrivateGame, noBots
@@ -189,13 +191,21 @@ function App() {
                 isPrivateGame: options.isPrivateGame || false,
                 noBots: options.noBots || false
             });
+        } else if (!username.trim()) {
+            setError('Veuillez entrer un nom d\'utilisateur');
         }
     };
 
     const handleJoinRoom = (roomId, username) => {
         if (socket && roomId.trim() && username.trim()) {
+            // Réinitialiser les erreurs précédentes
+            setError('');
             setUsername(username.trim());
             socket.emit('join-room', { roomId: roomId.trim(), username: username.trim() });
+        } else if (!username.trim()) {
+            setError('Veuillez entrer un nom d\'utilisateur');
+        } else if (!roomId.trim()) {
+            setError('Veuillez entrer le code de la partie');
         }
     };
 
@@ -237,21 +247,30 @@ function App() {
                     <GameLobby
                         onCreateRoom={handleCreateRoom}
                         onJoinRoom={handleJoinRoom}
+                        error={error}
                     />
                 )}
 
                 {gameState === 'playing' && socket && gameMode === 'puzzle' && (
-                    <GameBoard
-                        socket={socket}
-                        roomId={roomId}
-                        username={username}
-                        players={players}
-                        pieces={pieces}
-                    />
+                    <>
+                        <button onClick={handleLeaveRoom} className="leave-game-btn">
+                            Quitter la partie
+                        </button>
+                        <GameBoard
+                            socket={socket}
+                            roomId={roomId}
+                            username={username}
+                            players={players}
+                            pieces={pieces}
+                        />
+                    </>
                 )}
                 
                 {gameState === 'playing' && socket && gameMode === 'conquest' && (
                     <>
+                        <button onClick={handleLeaveRoom} className="leave-game-btn">
+                            Quitter la partie
+                        </button>
                         <div style={{marginBottom: '10px', color: '#FFD700'}}>
                             Mode conquête actif: {conquestGameState ? 'Données chargées' : 'En attente des données...'}
                         </div>

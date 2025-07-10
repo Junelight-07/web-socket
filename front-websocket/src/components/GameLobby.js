@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 
-const GameLobby = ({ onCreateRoom, onJoinRoom }) => {
+const GameLobby = ({ onCreateRoom, onJoinRoom, error }) => {
     const [username, setUsername] = useState('');
     const [roomId, setRoomId] = useState('');
     const [gameMode, setGameMode] = useState('puzzle'); // 'puzzle' ou 'conquest'
     const [mapSize, setMapSize] = useState('SMALL');
     const [difficulty, setDifficulty] = useState('MEDIUM');
     const [isPrivateGame, setIsPrivateGame] = useState(false);
+    const [attemptedCreate, setAttemptedCreate] = useState(false);
+    const [attemptedJoin, setAttemptedJoin] = useState(false);
     
     // Options pour la création de partie
     const handleCreateRoom = () => {
+        setAttemptedCreate(true);
         const options = {
             gameMode,
             mapSize,
@@ -21,6 +24,7 @@ const GameLobby = ({ onCreateRoom, onJoinRoom }) => {
     
     // Options pour la création de partie privée sans bots
     const handleCreatePrivateGame = () => {
+        setAttemptedCreate(true);
         const options = {
             gameMode: 'conquest',
             mapSize: 'LARGE',
@@ -34,6 +38,12 @@ const GameLobby = ({ onCreateRoom, onJoinRoom }) => {
     return (
         <div className="game-lobby">
             <h2>🎮 Lobby du Jeu</h2>
+            
+            {error && (
+                <div className="lobby-error-message">
+                    ⚠️ {error}
+                </div>
+            )}
             
             <div className="game-modes">
                 <h3>Choisissez un mode de jeu</h3>
@@ -83,20 +93,33 @@ const GameLobby = ({ onCreateRoom, onJoinRoom }) => {
             
             <div className="lobby-inputs">
                 <div className="input-group">
-                    <label>Votre nom:</label>
-                    <input
-                        type="text"
-                        placeholder="Entrez votre nom"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
+                    <label>Votre nom: <span className="required-field">*</span></label>
+                    <div className="input-with-validation">
+                        <input
+                            type="text"
+                            placeholder="Entrez votre nom"
+                            value={username}
+                            onChange={(e) => {
+                                setUsername(e.target.value);
+                                if (e.target.value.trim()) {
+                                    setAttemptedCreate(false);
+                                    setAttemptedJoin(false);
+                                }
+                            }}
+                            className={!username.trim() && attemptedCreate ? "empty-field" : ""}
+                        />
+                        {!username.trim() && attemptedCreate && 
+                            <div className="input-error-hint">Nom requis pour jouer</div>
+                        }
+                    </div>
                 </div>
                 
                 <div className="buttons">
                     <button 
-                        className="create-btn"
+                        className={`create-btn ${!username.trim() && attemptedCreate ? 'disabled-button' : ''}`}
                         onClick={handleCreateRoom}
-                        disabled={!username}
+                        disabled={!username.trim() && attemptedCreate}
+                        title={!username.trim() ? "Veuillez entrer un nom d'utilisateur" : "Créer une nouvelle partie"}
                     >
                         Créer une partie
                     </button>
@@ -104,10 +127,10 @@ const GameLobby = ({ onCreateRoom, onJoinRoom }) => {
                     {gameMode === 'conquest' && (
                         <div className="private-game-container">
                             <button 
-                                className="create-private-btn"
+                                className={`create-private-btn ${!username.trim() && attemptedCreate ? 'disabled-button' : ''}`}
                                 onClick={handleCreatePrivateGame}
-                                disabled={!username}
-                                title="Partie multijoueur sans bots sur une grande carte"
+                                disabled={!username.trim() && attemptedCreate}
+                                title={!username.trim() ? "Veuillez entrer un nom d'utilisateur" : "Partie multijoueur sans bots sur une grande carte"}
                             >
                                 Créer une partie privée (10 joueurs)
                             </button>
@@ -122,19 +145,39 @@ const GameLobby = ({ onCreateRoom, onJoinRoom }) => {
                 
                 <div className="input-group">
                     <label>Rejoindre une partie existante:</label>
-                    <div className="join-inputs">
-                        <input
-                            type="text"
-                            placeholder="Code de la partie"
-                            value={roomId}
-                            onChange={(e) => setRoomId(e.target.value)}
-                        />
-                        <button 
-                            onClick={() => onJoinRoom(roomId, username)}
-                            disabled={!username || !roomId}
-                        >
-                            Rejoindre
-                        </button>
+                    <div className="join-inputs-container">
+                        <div className="join-inputs">
+                            <div className="input-with-validation">
+                                <input
+                                    type="text"
+                                    placeholder="Code de la partie"
+                                    value={roomId}
+                                    onChange={(e) => {
+                                        setRoomId(e.target.value);
+                                        if (e.target.value.trim()) {
+                                            setAttemptedJoin(false);
+                                        }
+                                    }}
+                                    className={!roomId.trim() && attemptedJoin ? "empty-field" : ""}
+                                />
+                                {!roomId.trim() && attemptedJoin && 
+                                    <div className="input-error-hint">Code requis</div>
+                                }
+                            </div>
+                            <button 
+                                onClick={() => {
+                                    setAttemptedJoin(true);
+                                    onJoinRoom(roomId, username);
+                                }}
+                                disabled={!username || !roomId}
+                                className={(!username || !roomId) ? "disabled-button" : ""}
+                            >
+                                Rejoindre
+                            </button>
+                        </div>
+                        {!username.trim() && attemptedJoin && 
+                            <div className="input-error-hint centered-hint">Nom d'utilisateur requis</div>
+                        }
                     </div>
                 </div>
             </div>
