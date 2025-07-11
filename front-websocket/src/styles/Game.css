@@ -56,3 +56,548 @@ button {
 button:hover {
     background: #2980b9;
 }
+
+/* Styles pour le lobby */
+.game-lobby {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.lobby-error-message {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+    to { box-shadow: 0 4px 12px rgba(231, 76, 60, 0.5); }
+}
+
+.game-modes {
+    margin-bottom: 30px;
+}
+
+.mode-selection {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.game-mode {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+    border: 2px solid transparent;
+}
+
+.game-mode:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.game-mode.selected {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.mode-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.mode-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.mode-description {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.conquest-options {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.option-group select {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.lobby-inputs {
+    margin-top: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.create-btn {
+    padding: 10px 30px;
+    font-size: 16px;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+}
+
+.create-private-btn {
+    padding: 10px 30px;
+    font-size: 16px;
+    background: linear-gradient(45deg, #9c27b0, #673ab7);
+    margin-left: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.create-private-btn:before {
+    content: "🔒";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+}
+
+.create-private-btn:hover {
+    background: linear-gradient(45deg, #8e24aa, #5e35b1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .create-private-btn {
+        margin-left: 0;
+    }
+}
+
+.join-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.separator {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.separator::before {
+    left: 0;
+}
+
+.separator::after {
+    right: 0;
+}
+
+/* Styles pour la liste des joueurs */
+.players-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    backdrop-filter: blur(10px);
+}
+
+.players-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.player-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.player-item.current-player {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.player-name {
+    font-weight: bold;
+}
+
+.you-indicator {
+    font-size: 0.8em;
+    color: #FFD700;
+    font-weight: normal;
+}
+
+.player-status {
+    font-size: 0.8em;
+}
+
+.no-players {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    margin: 10px 0;
+}
+
+.puzzle-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    backdrop-filter: blur(10px);
+}
+
+/* Styles pour le puzzle */
+.puzzle-board {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.puzzle-piece {
+    position: absolute;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.puzzle-piece:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.puzzle-piece.grabbed {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+.puzzle-piece.placed {
+    border-color: #4CAF50;
+    background: linear-gradient(45deg, #4CAF50, #45a049) !important;
+}
+
+.piece-info {
+    text-align: center;
+    line-height: 1;
+}
+
+.grabbed-indicator {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.no-puzzle {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Styles pour les règles du jeu */
+.game-rules {
+    margin: 10px 0;
+}
+
+.rules-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.rules-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.rules-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.rules-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: #333;
+}
+
+.rules-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 2px solid #f0f0f0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px 15px 0 0;
+}
+
+.rules-header h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.close-rules {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.close-rules:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.rules-body {
+    padding: 25px;
+}
+
+.rule-section {
+    margin-bottom: 20px;
+}
+
+.rule-section h4 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-left: 4px solid #667eea;
+    padding-left: 10px;
+}
+
+.rule-section p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.rule-section ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.rule-section li {
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+/* Styles améliorés pour le drag & drop */
+.puzzle-piece.dragging {
+    cursor: grabbing !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    z-index: 1000 !important;
+}
+
+.puzzle-piece.held-by-other {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    filter: grayscale(30%);
+}
+
+.puzzle-piece:hover:not(.held-by-other):not(.placed) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.correct-zone {
+    pointer-events: none;
+    user-select: none;
+}
+
+.puzzle-board {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animation pour les pièces bien placées */
+.puzzle-piece.placed {
+    animation: pieceSnap 0.3s ease-out;
+}
+
+@keyframes pieceSnap {
+    0% { transform: scale(1.1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.private-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(156, 39, 176, 0.1);
+    border-radius: 10px;
+    border: 1px dashed rgba(156, 39, 176, 0.5);
+}
+
+.private-game-info {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.leave-game-btn {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 100;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.leave-game-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Styles pour la validation des champs */
+.required-field {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+.input-with-validation {
+    position: relative;
+    width: 100%;
+}
+
+.empty-field {
+    border: 2px solid #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.input-error-hint {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 2px;
+    font-style: italic;
+    position: absolute;
+    left: 10px;
+    top: 100%;
+}
+
+.centered-hint {
+    position: relative;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.join-inputs-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.disabled-button {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
